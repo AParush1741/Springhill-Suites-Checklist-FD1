@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SpringHill Suites — Front Desk Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a3a5c;
+    --navy-dark: #112640;
+    --navy-light: #e8f0f8;
+    --gold: #c9a84c;
+    --gold-light: #faf3e0;
+    --success: #2e7d5e;
+    --success-light: #e8f5ee;
+    --danger: #c0392b;
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --border: #e2e6ed;
+    --text: #1a2533;
+    --text-muted: #6b7a8d;
+    --text-light: #9ba8b5;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: #fff;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 12px rgba(26,58,92,0.18);
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .header-title { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.95); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .status-badge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s;
+  }
+  .status-badge.complete { background: var(--success); border-color: var(--success); color: #fff; }
+
+  /* ── MAIN CONTAINER ── */
+  .container { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+
+  /* ── META CARD ── */
+  .meta-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  @media(max-width: 560px) { .meta-card { grid-template-columns: 1fr; } }
+  .meta-card label { font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .meta-card input, .meta-card select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .meta-card input:focus, .meta-card select:focus { border-color: var(--navy); background: #fff; }
+
+  /* ── PROGRESS ── */
+  .progress-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .progress-circle {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+  }
+  .progress-circle svg { transform: rotate(-90deg); }
+  .progress-circle .track { fill: none; stroke: var(--border); stroke-width: 4; }
+  .progress-circle .fill { fill: none; stroke: var(--navy); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 0.4s ease; }
+  .progress-circle .fill.complete { stroke: var(--success); }
+  .progress-pct {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: var(--navy);
+  }
+  .progress-pct.complete { color: var(--success); }
+  .progress-info { flex: 1; }
+  .progress-info .big { font-size: 15px; font-weight: 500; color: var(--text); }
+  .progress-info .small { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+  .progress-bar-wrap { flex: 2; height: 6px; background: var(--border); border-radius: 4px; }
+  .progress-bar { height: 6px; background: var(--navy); border-radius: 4px; transition: width 0.4s ease; }
+  .progress-bar.complete { background: var(--success); }
+  @media(max-width: 560px) { .progress-bar-wrap { display: none; } }
+
+  /* ── SECTIONS ── */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+    background: #fafbfd;
+  }
+  .section-icon {
+    width: 32px; height: 32px;
+    background: var(--navy-light);
+    color: var(--navy);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .section-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .section-pill {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .section-pill.done { background: var(--success-light); color: var(--success); border-color: #b2d8c8; }
+
+  /* ── TASKS ── */
+  .task-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .task-row:last-child { border-bottom: none; }
+  .task-row:hover { background: #fafbfd; }
+  .task-row.checked { background: var(--success-light); }
+  .task-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  .task-check.checked { background: var(--success); border-color: var(--success); }
+  .task-check .ti { font-size: 13px; color: #fff; display: none; }
+  .task-check.checked .ti { display: block; }
+  .task-body { flex: 1; }
+  .task-label { font-size: 14px; color: var(--text); line-height: 1.45; transition: color 0.2s; }
+  .task-label.done { text-decoration: line-through; color: var(--text-light); }
+  .task-meta { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+  .task-time {
+    font-size: 12px; color: var(--navy);
+    display: flex; align-items: center; gap: 3px;
+    background: var(--navy-light); padding: 2px 7px; border-radius: 4px;
+  }
+  .task-note { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+  /* ── FOOTER / BUTTONS ── */
+  .footer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 18px;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .btn-primary:hover { background: var(--navy-dark); }
+  .btn-secondary { background: transparent; color: var(--text-muted); border-color: var(--border); }
+  .btn-secondary:hover { background: var(--bg); }
+  .autosave-pill {
+    margin-left: auto;
+    font-size: 12px; color: var(--success);
+    display: none; align-items: center; gap: 4px;
+    animation: fadein 0.3s;
+  }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(10, 20, 35, 0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 28px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(26,58,92,0.18);
+  }
+  .modal h2 { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .modal p { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+  .modal label { font-size: 12px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .modal input, .modal textarea {
+    width: 100%; margin-bottom: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .modal input:focus, .modal textarea:focus { border-color: var(--navy); background: #fff; }
+  .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: #fff;
+    padding: 11px 20px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+  }
+  .toast.show { opacity: 1; }
+
+  /* ── SUBMITTED BANNER ── */
+  .submitted-banner {
+    display: none;
+    background: var(--success-light);
+    border: 1px solid #b2d8c8;
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 10px;
+    color: var(--success);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .submitted-banner.show { display: flex; }
+
+  /* ── LAST REPORT ── */
+  .last-report {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .last-report.show { display: block; }
+  .last-report h3 { font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .last-report pre {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+    line-height: 1.7;
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--bg);
+    padding: 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="header-logo">SPRINGHILL SUITES</div>
+    <div class="header-title">Front Desk Shift Checklist</div>
+  </div>
+  <div class="header-right">
+    <span class="status-badge" id="status-badge">In Progress</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- LAST REPORT BANNER -->
+  <div class="submitted-banner" id="submitted-banner">
+    <i class="ti ti-circle-check" style="font-size:20px"></i>
+    <span id="submitted-text">Last report submitted successfully.</span>
+    <button onclick="toggleLastReport()" style="margin-left:auto;background:none;border:none;color:inherit;font-size:13px;cursor:pointer;text-decoration:underline">View report</button>
+  </div>
+  <div class="last-report" id="last-report">
+    <h3>Last submitted report</h3>
+    <pre id="last-report-text"></pre>
+  </div>
+
+  <!-- META -->
+  <div class="meta-card">
+    <div>
+      <label>Staff Name</label>
+      <input type="text" id="staff-name" placeholder="Your name" />
+    </div>
+    <div>
+      <label>Shift</label>
+      <select id="shift-select">
+        <option value="AM Shift (7am – 3pm)">AM Shift (7am – 3pm)</option>
+        <option value="PM Shift (3pm – 11pm)">PM Shift (3pm – 11pm)</option>
+        <option value="Night Audit (11pm – 7am)">Night Audit (11pm – 7am)</option>
+      </select>
+    </div>
+    <div>
+      <label>Date</label>
+      <input type="date" id="shift-date" />
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-card">
+    <div class="progress-circle">
+      <svg width="56" height="56" viewBox="0 0 56 56">
+        <circle class="track" cx="28" cy="28" r="24" />
+        <circle class="fill" id="progress-ring" cx="28" cy="28" r="24"
+          stroke-dasharray="150.8" stroke-dashoffset="150.8" />
+      </svg>
+      <div class="progress-pct" id="progress-pct">0%</div>
+    </div>
+    <div class="progress-info">
+      <div class="big" id="progress-big">0 of 18 tasks complete</div>
+      <div class="small" id="progress-small">Keep going — you've got this.</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST BODY -->
+  <div id="checklist-body"></div>
+
+  <!-- FOOTER -->
+  <div class="footer-card">
+    <button class="btn btn-primary" id="submit-btn" onclick="showModal()">
+      <i class="ti ti-send"></i> Submit Shift Report
+    </button>
+    <button class="btn btn-secondary" onclick="confirmReset()">
+      <i class="ti ti-refresh"></i> Reset
+    </button>
+    <div class="autosave-pill" id="autosave-pill">
+      <i class="ti ti-device-floppy" style="font-size:14px"></i> Auto-saved
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- SUBMIT MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2>Submit shift report</h2>
+    <p>This will open your email client with a pre-filled shift report ready to send to your admin. Double-check your name and shift are correct above.</p>
+    <label>Admin email address</label>
+    <input type="email" id="admin-email" placeholder="manager@springhillsuites.com" />
+    <label>Shift handoff notes (optional)</label>
+    <textarea id="shift-notes" rows="3" placeholder="Any unresolved issues, maintenance items, or notes for the next shift..."></textarea>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitReport()">
+        <i class="ti ti-send"></i> Send Report
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const SECTIONS = [
+  {
+    id: "arrivals",
+    icon: "ti-door-enter",
+    title: "Arrivals & Check-In",
+    subtitle: "Review and prepare for incoming guests",
+    tasks: [
+      { id: "a1", label: "Review arrivals report for today", note: "Print from PMS — check for VIPs, special requests, early arrivals" },
+      { id: "a2", label: "Verify room assignments and block rooms accordingly", time: "By 9:00 AM" },
+      { id: "a3", label: "Confirm pre-registered guests are ready to check in" },
+      { id: "a4", label: "Check for any outstanding deposits or payment issues" }
+    ]
+  },
+  {
+    id: "reports",
+    icon: "ti-file-text",
+    title: "Reports to Print",
+    subtitle: "Time-sensitive daily reports",
+    tasks: [
+      { id: "r1", label: "Print arrivals report", time: "7:00 AM" },
+      { id: "r2", label: "Print in-house guest report", time: "8:00 AM" },
+      { id: "r3", label: "Print departure report", time: "8:00 AM" },
+      { id: "r4", label: "Print housekeeping room status report", time: "9:00 AM" }
+    ]
+  },
+  {
+    id: "desk",
+    icon: "ti-home",
+    title: "Front Desk & Lobby",
+    subtitle: "Physical space and supplies",
+    tasks: [
+      { id: "d1", label: "Ensure front desk is clean and organized" },
+      { id: "d2", label: "Restock key card sleeves, pens, and registration forms" },
+      { id: "d3", label: "Check lobby for cleanliness — notify housekeeping if needed" },
+      { id: "d4", label: "Verify all signage is current (events, pool hours, etc.)" }
+    ]
+  },
+  {
+    id: "comms",
+    icon: "ti-phone",
+    title: "Communications & Follow-Ups",
+    subtitle: "Messages, requests, and reservations",
+    tasks: [
+      { id: "c1", label: "Check voicemails and respond to any pending messages" },
+      { id: "c2", label: "Review maintenance requests from prior shift", note: "Log unresolved items in handoff notes" },
+      { id: "c3", label: "Check group block reservations for accuracy" }
+    ]
+  },
+  {
+    id: "checkout",
+    icon: "ti-receipt",
+    title: "Check-Out & Departures",
+    subtitle: "Process departures and post charges",
+    tasks: [
+      { id: "x1", label: "Process all pending checkouts and post final charges" },
+      { id: "x2", label: "Verify disputed charges are escalated to manager" },
+      { id: "x3", label: "Update room status for cleaned and ready rooms" }
+    ]
+  },
+  {
+    id: "handoff",
+    icon: "ti-transfer",
+    title: "Shift Handoff",
+    subtitle: "End-of-shift wrap-up",
+    tasks: [
+      { id: "h1", label: "Brief incoming shift on any VIP arrivals or issues" },
+      { id: "h2", label: "Ensure cash drawer is counted and balanced" },
+      { id: "h3", label: "Log all unresolved issues in the shift log" }
+    ]
+  }
+];
+
+let state = {};
+const CIRCUMFERENCE = 2 * Math.PI * 24;
+
+function loadState() {
+  try { state = JSON.parse(localStorage.getItem('fd_cl_v2') || '{}'); } catch(e) { state = {}; }
+}
+
+function saveState() {
+  try { localStorage.setItem('fd_cl_v2', JSON.stringify(state)); } catch(e) {}
+  const pill = document.getElementById('autosave-pill');
+  pill.style.display = 'flex';
+  clearTimeout(pill._t);
+  pill._t = setTimeout(() => { pill.style.display = 'none'; }, 2200);
+}
+
+function getTotals() {
+  let total = 0, done = 0;
+  SECTIONS.forEach(s => {
+    total += s.tasks.length;
+    done += s.tasks.filter(t => state[t.id]).length;
+  });
+  return { total, done };
+}
+
+function updateProgress() {
+  const { total, done } = getTotals();
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const isComplete = done === total;
+
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-bar').className = 'progress-bar' + (isComplete ? ' complete' : '');
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-pct').className = 'progress-pct' + (isComplete ? ' complete' : '');
+  document.getElementById('progress-big').textContent = done + ' of ' + total + ' tasks complete';
+
+  const phrases = ['Keep going — you\'ve got this.', 'Good progress!', 'Almost there!', 'All done — great work!'];
+  const idx = pct === 100 ? 3 : pct >= 66 ? 2 : pct >= 33 ? 1 : 0;
+  document.getElementById('progress-small').textContent = phrases[idx];
+
+  const offset = CIRCUMFERENCE - (pct / 100) * CIRCUMFERENCE;
+  const ring = document.getElementById('progress-ring');
+  ring.style.strokeDashoffset = offset;
+  ring.className = 'fill' + (isComplete ? ' complete' : '');
+
+  const badge = document.getElementById('status-badge');
+  badge.textContent = isComplete ? 'Complete ✓' : 'In Progress';
+  badge.className = 'status-badge' + (isComplete ? ' complete' : '');
+}
+
+function renderChecklist() {
+  const body = document.getElementById('checklist-body');
+  body.innerHTML = '';
+  SECTIONS.forEach(sec => {
+    const secDone = sec.tasks.filter(t => state[t.id]).length;
+    const allDone = secDone === sec.tasks.length;
+    const wrap = document.createElement('div');
+    wrap.className = 'section';
+    wrap.innerHTML = `
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ${sec.icon}"></i></div>
+        <div>
+          <div class="section-title">${sec.title}</div>
+          <div class="section-subtitle">${sec.subtitle}</div>
+        </div>
+        <div class="section-pill ${allDone ? 'done' : ''}" id="pill-${sec.id}">${secDone}/${sec.tasks.length} done</div>
+      </div>`;
+    sec.tasks.forEach(task => {
+      const row = document.createElement('div');
+      const ck = state[task.id];
+      row.className = 'task-row' + (ck ? ' checked' : '');
+      row.innerHTML = `
+        <div class="task-check ${ck ? 'checked' : ''}" id="chk-${task.id}" onclick="toggle('${task.id}','${sec.id}')">
+          <i class="ti ti-check"></i>
+        </div>
+        <div class="task-body">
+          <div class="task-label ${ck ? 'done' : ''}" id="lbl-${task.id}">${task.label}</div>
+          <div class="task-meta">
+            ${task.time ? `<div class="task-time"><i class="ti ti-clock" style="font-size:11px"></i>${task.time}</div>` : ''}
+            ${task.note ? `<div class="task-note">${task.note}</div>` : ''}
+          </div>
+        </div>`;
+      wrap.appendChild(row);
+    });
+    body.appendChild(wrap);
+  });
+  updateProgress();
+}
+
+function toggle(taskId, secId) {
+  state[taskId] = !state[taskId];
+  const chk = document.getElementById('chk-' + taskId);
+  const lbl = document.getElementById('lbl-' + taskId);
+  const row = chk.closest('.task-row');
+  chk.className = 'task-check' + (state[taskId] ? ' checked' : '');
+  lbl.className = 'task-label' + (state[taskId] ? ' done' : '');
+  row.className = 'task-row' + (state[taskId] ? ' checked' : '');
+  const sec = SECTIONS.find(s => s.id === secId);
+  const secDone = sec.tasks.filter(t => state[t.id]).length;
+  const allDone = secDone === sec.tasks.length;
+  const pill = document.getElementById('pill-' + secId);
+  pill.textContent = secDone + '/' + sec.tasks.length + ' done';
+  pill.className = 'section-pill' + (allDone ? ' done' : '');
+  updateProgress();
+  saveState();
+}
+
+function buildReportText() {
+  const name = document.getElementById('staff-name').value || '(not entered)';
+  const shift = document.getElementById('shift-select').value;
+  const date = document.getElementById('shift-date').value;
+  const notes = document.getElementById('shift-notes').value;
+  const { total, done } = getTotals();
+  let out = `SPRINGHILL SUITES — SHIFT CHECKLIST REPORT\n`;
+  out += `${'='.repeat(45)}\n`;
+  out += `Staff:    ${name}\n`;
+  out += `Shift:    ${shift}\n`;
+  out += `Date:     ${date}\n`;
+  out += `Progress: ${done} of ${total} tasks completed\n`;
+  if (notes) out += `Notes:    ${notes}\n`;
+  out += `\n`;
+  SECTIONS.forEach(sec => {
+    const secDone = sec.tasks.filter(t => state[t.id]).length;
+    out += `\n${sec.title.toUpperCase()} (${secDone}/${sec.tasks.length})\n`;
+    out += `${'-'.repeat(35)}\n`;
+    sec.tasks.forEach(t => {
+      out += `${state[t.id] ? '[x]' : '[ ]'} ${t.label}\n`;
+    });
+  });
+  out += `\n${'='.repeat(45)}\n`;
+  out += `Submitted: ${new Date().toLocaleString()}`;
+  return out;
+}
+
+function showModal() {
+  const name = document.getElementById('staff-name').value.trim();
+  if (!name) { showToast('Please enter your name before submitting.'); return; }
+  if (state['_admin_email']) document.getElementById('admin-email').value = state['_admin_email'];
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function submitReport() {
+  const email = document.getElementById('admin-email').value.trim();
+  if (!email) { showToast('Please enter the admin email address.'); return; }
+  state['_admin_email'] = email;
+
+  const name = document.getElementById('staff-name').value || 'Staff';
+  const shift = document.getElementById('shift-select').value;
+  const date = document.getElementById('shift-date').value;
+  const body = buildReportText();
+
+  const subject = encodeURIComponent(`Shift Report — ${shift} — ${date} — ${name}`);
+  const mailbody = encodeURIComponent(body);
+  window.location.href = `mailto:${email}?subject=${subject}&body=${mailbody}`;
+
+  try {
+    localStorage.setItem('fd_last_report', body);
+    localStorage.setItem('fd_last_report_meta', JSON.stringify({ name, shift, date, time: new Date().toLocaleString() }));
+  } catch(e) {}
+
+  closeModal();
+
+  setTimeout(() => {
+    state = { _admin_email: email };
+    saveState();
+    renderChecklist();
+    showSubmittedBanner(name, shift, date);
+    showToast('Checklist reset for next shift.');
+  }, 1200);
+}
+
+function showSubmittedBanner(name, shift, date) {
+  const banner = document.getElementById('submitted-banner');
+  document.getElementById('submitted-text').textContent = `Last report submitted: ${name} — ${shift} — ${date}`;
+  banner.classList.add('show');
+  const lastText = localStorage.getItem('fd_last_report');
+  if (lastText) {
+    document.getElementById('last-report-text').textContent = lastText;
+  }
+}
+
+function toggleLastReport() {
+  const el = document.getElementById('last-report');
+  el.classList.toggle('show');
+}
+
+function confirmReset() {
+  if (confirm('Reset all checkboxes for a fresh shift?')) {
+    state = { _admin_email: state['_admin_email'] || '' };
+    saveState();
+    renderChecklist();
+    document.getElementById('submitted-banner').classList.remove('show');
+    document.getElementById('last-report').classList.remove('show');
+    showToast('Checklist has been reset.');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// INIT
+document.getElementById('shift-date').value = new Date().toISOString().split('T')[0];
+loadState();
+
+['staff-name', 'shift-select', 'shift-date'].forEach(id => {
+  const el = document.getElementById(id);
+  if (state['_meta_' + id]) el.value = state['_meta_' + id];
+  el.addEventListener('input', () => { state['_meta_' + id] = el.value; saveState(); });
+});
+
+if (state['_admin_email']) {
+  try {
+    const meta = JSON.parse(localStorage.getItem('fd_last_report_meta') || 'null');
+    if (meta) showSubmittedBanner(meta.name, meta.shift, meta.date);
+  } catch(e) {}
+}
+
+renderChecklist();
+</script>
+</body>
+</html>
